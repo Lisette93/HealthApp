@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  body { margin:0; background:#efe4d8; font-family:'Jost',sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#8a6a4f; text-decoration:none; }
+  a:hover { color:#5c4433; }
+  ::-webkit-scrollbar { height:0; width:0; }
+</style>
+</helmet>
+<div style="padding:56px 48px 80px; display:flex; flex-direction:column; gap:40px;">
+
+  <div style="display:flex; flex-direction:column; gap:10px; max-width:640px;">
+    <div style="font-family:'Jost',sans-serif; font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:#a08a73;">UX-koncept · mobil</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:52px; letter-spacing:.14em; color:#3d342c;">BALANS</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:21px; color:#7d6f62;">Träning, återhämtning och kost på ett samlat ställe</div>
+    <div style="font-size:14px; line-height:1.7; color:#7d6f62; margin-top:6px;">Sex skärmar som tar användaren från inspiration till genomfört pass: ett dagligt val, en tydlig passlista, förberedelse inför passet, återhämtning, näring och en lugn överblick över veckan.</div>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:36px; align-items:flex-start;">
+
+    <!-- 1. HEM -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">01 · Start</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Dagens val</div>
+      </div>
+      <div data-screen-label="01 Start" style="width:360px; height:760px; border-radius:34px; background:#faf4ee; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column; position:relative;">
+        <div style="position:relative; height:250px; flex:none; background:url('uploads/yoga-girl.png') 50% 34%/cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.30) 0%,rgba(45,38,31,.78) 100%);"></div>
+          <div style="position:absolute; left:22px; right:22px; bottom:22px; display:flex; flex-direction:column; gap:14px;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:30px; line-height:1.15; color:#fff;">God morgon, Elin</div>
+            <div style="font-size:13px; color:#fff; line-height:1.5;">Du har gjort 3 pass den här veckan</div>
+            <div style="align-self:flex-start; background:#b99e85; color:#fff; padding:12px 22px; border-radius:999px; font-size:14px; letter-spacing:.04em;">Testa appen gratis</div>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:26px 0 0; display:flex; flex-direction:column; gap:26px;">
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div style="padding:0 22px; font-family:'Cormorant Garamond',serif; font-size:24px; color:#3d342c;">Vad behöver din kropp idag?</div>
+            <div style="display:flex; gap:14px; padding:0 22px 4px; overflow:hidden;">
+              <div style="flex:none; width:150px; height:190px; border-radius:22px; position:relative; overflow:hidden; background:url('uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG') 55% 50%/cover no-repeat;">
+                <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.2),rgba(45,38,31,.72));"></div>
+                <div style="position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center;">
+                  <span style="background:rgba(122,99,79,.95); color:#fff; font-family:'Cormorant Garamond',serif; font-size:22px; letter-spacing:.16em; padding:8px 16px; border-radius:8px;">POWER</span>
+                </div>
+                <div style="position:absolute; bottom:12px; left:14px; right:14px; font-size:11px; color:#fff; line-height:1.4;">Energi &amp; styrka</div>
+              </div>
+              <div style="flex:none; width:150px; height:190px; border-radius:22px; position:relative; overflow:hidden; background:url('uploads/yoga-girl2.png') 50% 35%/cover no-repeat;">
+                <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.2),rgba(45,38,31,.72));"></div>
+                <div style="position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center;">
+                  <span style="background:rgba(96,88,78,.95); color:#fff; font-family:'Cormorant Garamond',serif; font-size:22px; letter-spacing:.16em; padding:8px 16px; border-radius:8px;">RESET</span>
+                </div>
+                <div style="position:absolute; bottom:12px; left:14px; right:14px; font-size:11px; color:#fff; line-height:1.4;">Andning &amp; vila</div>
+              </div>
+              <div style="flex:none; width:90px; height:190px; border-radius:22px; background:url('uploads/woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG') 60% 45%/cover no-repeat;"></div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="padding:0 22px; display:flex; align-items:baseline; justify-content:space-between;">
+              <div style="font-family:'Cormorant Garamond',serif; font-size:24px; color:#3d342c;">Fortsätt där du var</div>
+              <div style="font-size:12px; color:#a08a73; letter-spacing:.06em;">Se allt</div>
+            </div>
+            <div style="margin:0 22px; background:#f2e8dd; border-radius:20px; padding:16px; display:flex; gap:14px; align-items:center;">
+              <div style="width:64px; height:64px; border-radius:16px; flex:none; background:url('uploads/woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG') 60% 45%/cover no-repeat;"></div>
+              <div style="display:flex; flex-direction:column; gap:5px; min-width:0;">
+                <div style="font-size:15px; color:#3d342c;">Core balance</div>
+                <div style="font-size:12px; color:#8b7d6f;">25 min · 12 min kvar</div>
+                <div style="height:4px; border-radius:99px; background:#e2d3c1; overflow:hidden;"><div style="width:52%; height:100%; background:#b99e85;"></div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="flex:none; height:72px; background:#f4ebe1; border-top:1px solid #e6d9ca; display:grid; grid-template-columns:repeat(4,1fr); align-items:center; padding-bottom:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#8a6a4f;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.6 10 3.4l6.8 5.2V16a1 1 0 0 1-1 1h-3.4v-4.6H7.6V17H4.2a1 1 0 0 1-1-1z"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Hem</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 10h2.9l2.2-5.6 3 11.2 2.3-5.6h4.8"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Träning</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 9.2h14.4a7.2 7.2 0 0 1-14.4 0z"></path><path d="M10 6.4c0-1.5.9-2.3 1.8-2.9"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Kost</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="14" height="12.2" rx="2.4"></rect><path d="M3 8.6h14M7 3.2v2.6M13 3.2v2.6"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Rutin</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Ett enda beslut i taget. Hjälten svarar på frågan "vad behöver din kropp idag" istället för att visa hela katalogen.</div>
+    </div>
+
+    <!-- 2. POWER -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">02 · Träning</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Power – passlista</div>
+      </div>
+      <div data-screen-label="02 Power" style="width:360px; height:760px; border-radius:34px; background:#faf4ee; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column; position:relative;">
+        <div style="position:absolute; top:-60px; right:-90px; width:260px; height:260px; border-radius:50%; border:1px solid #ece0d2;"></div>
+        <div style="position:absolute; top:120px; left:-120px; width:240px; height:240px; border-radius:50%; border:1px solid #ece0d2;"></div>
+
+        <div style="flex:none; padding:38px 22px 0; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:38px; letter-spacing:.2em; color:#3d342c;">POWER</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:#7d6f62;">Rörelse för energi och stabilitet</div>
+        </div>
+
+        <div style="flex:none; padding:24px 22px 0; display:flex; flex-direction:column; gap:14px; position:relative;">
+          <div style="display:flex; gap:10px;">
+            <div style="display:flex; align-items:center; gap:7px; background:#3d342c; color:#faf4ee; padding:9px 15px; border-radius:999px; font-size:13px;"><span style="width:6px; height:6px; border-radius:99px; background:#d8bfa5;"></span>Nivå 2</div>
+            <div style="display:flex; align-items:center; gap:7px; background:#f1e7dc; color:#6d6055; padding:9px 15px; border-radius:999px; font-size:13px; border:1px solid #e6d9ca;">Tid</div>
+            <div style="display:flex; align-items:center; gap:7px; background:#f1e7dc; color:#6d6055; padding:9px 15px; border-radius:999px; font-size:13px; border:1px solid #e6d9ca;">Tempo</div>
+          </div>
+          <div style="font-size:12px; line-height:1.6; color:#8b7d6f;">Alla pass är 15–30 minuter och anpassade att utföra när och var du vill.</div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:18px 22px 0; display:flex; flex-direction:column; gap:14px; position:relative;">
+          <div style="position:relative; height:150px; border-radius:22px; overflow:hidden; background:url('uploads/yoga-girl.png') 50% 40%/cover no-repeat; box-shadow:0 14px 30px -18px rgba(90,70,52,.6);">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.55),rgba(45,38,31,.3) 45%,rgba(45,38,31,.78));"></div>
+            <div style="position:absolute; top:14px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-start;">
+              <div style="font-family:'Cormorant Garamond',serif; font-size:25px; color:#fff;">Morning flow</div>
+              <div style="background:rgba(255,255,255,.92); color:#5c4433; font-size:10px; letter-spacing:.1em; padding:5px 10px; border-radius:99px; text-transform:uppercase;">Populär</div>
+            </div>
+            <div style="position:absolute; bottom:14px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:8px;">
+                <div style="background:rgba(250,244,238,.22); backdrop-filter:blur(4px); color:#fff; font-size:12px; padding:6px 12px; border-radius:99px;">20 min</div>
+                <div style="background:rgba(250,244,238,.22); color:#fff; font-size:12px; padding:6px 12px; border-radius:99px;">Nivå 2</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; height:150px; border-radius:22px; overflow:hidden; background:url('uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG') 55% 55%/cover no-repeat;">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.55),rgba(45,38,31,.3) 45%,rgba(45,38,31,.78));"></div>
+            <div style="position:absolute; top:14px; left:16px; font-family:'Cormorant Garamond',serif; font-size:25px; color:#fff;">Core balance</div>
+            <div style="position:absolute; bottom:14px; left:16px; display:flex; gap:8px;">
+              <div style="background:rgba(250,244,238,.22); color:#fff; font-size:12px; padding:6px 12px; border-radius:99px;">25 min</div>
+              <div style="background:rgba(250,244,238,.22); color:#fff; font-size:12px; padding:6px 12px; border-radius:99px;">Nivå 3</div>
+            </div>
+          </div>
+
+          <div style="position:relative; height:150px; border-radius:22px; overflow:hidden; background:url('uploads/yoga-girl2.png') 50% 38%/cover no-repeat;">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.55),rgba(45,38,31,.3) 45%,rgba(45,38,31,.78));"></div>
+            <div style="position:absolute; top:14px; left:16px; font-family:'Cormorant Garamond',serif; font-size:25px; color:#fff;">Power strength</div>
+            <div style="position:absolute; bottom:14px; left:16px; display:flex; gap:8px;">
+              <div style="background:rgba(250,244,238,.22); color:#fff; font-size:12px; padding:6px 12px; border-radius:99px;">30 min</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:72px; background:#f4ebe1; border-top:1px solid #e6d9ca; display:grid; grid-template-columns:repeat(4,1fr); align-items:center; padding-bottom:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.6 10 3.4l6.8 5.2V16a1 1 0 0 1-1 1h-3.4v-4.6H7.6V17H4.2a1 1 0 0 1-1-1z"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Hem</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#8a6a4f;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 10h2.9l2.2-5.6 3 11.2 2.3-5.6h4.8"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Träning</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 9.2h14.4a7.2 7.2 0 0 1-14.4 0z"></path><path d="M10 6.4c0-1.5.9-2.3 1.8-2.9"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Kost</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="14" height="12.2" rx="2.4"></rect><path d="M3 8.6h14M7 3.2v2.6M13 3.2v2.6"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Rutin</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Filtren visar nu valt värde ("Nivå 2") i stället för bara ikoner, och varje kort bär tid och nivå så valet kan göras direkt i listan.</div>
+    </div>
+
+    <!-- 3. PASSDETALJ -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">03 · Pass</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Morning flow</div>
+      </div>
+      <div data-screen-label="03 Passdetalj" style="width:360px; height:760px; border-radius:34px; background:#faf4ee; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column; position:relative;">
+        <div style="position:relative; flex:none; height:300px; background:url('uploads/yoga-girl.png') 50% 32%/cover no-repeat;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.35),rgba(45,38,31,.08) 38%,rgba(250,244,238,.98) 82%);"></div>
+          <div style="position:absolute; top:22px; left:20px; width:34px; height:34px; border-radius:99px; background:rgba(250,244,238,.85); display:flex; align-items:center; justify-content:center; color:#5c4433; font-size:15px;">←</div>
+          <div style="position:absolute; top:22px; right:20px; width:34px; height:34px; border-radius:99px; background:rgba(250,244,238,.85); display:flex; align-items:center; justify-content:center; color:#5c4433; font-size:14px;">♡</div>
+          <div style="position:absolute; left:24px; right:24px; bottom:18px; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#8a6a4f;">Power · Flow</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:34px; line-height:1.1; color:#3d342c;">Morning flow</div>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:4px 24px 0; display:flex; flex-direction:column; gap:20px;">
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1; background:#f2e8dd; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:4px;">
+              <div style="font-size:16px; color:#3d342c;">20</div><div style="font-size:11px; color:#8b7d6f;">minuter</div>
+            </div>
+            <div style="flex:1; background:#f2e8dd; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:4px;">
+              <div style="font-size:16px; color:#3d342c;">Nivå 2</div><div style="font-size:11px; color:#8b7d6f;">medel</div>
+            </div>
+            <div style="flex:1; background:#f2e8dd; border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:4px;">
+              <div style="font-size:16px; color:#3d342c;">Matta</div><div style="font-size:11px; color:#8b7d6f;">utrustning</div>
+            </div>
+          </div>
+
+          <div style="font-size:13px; line-height:1.75; color:#6d6055;">Ett mjukt men aktivt flöde som väcker höfter, rygg och axlar. Passet börjar lugnt och byggs upp mot stabilitet – passar direkt efter uppstigning.</div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:21px; color:#3d342c;">Så går passet till</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:26px; height:26px; flex:none; border-radius:99px; background:#e8dccd; color:#6d6055; font-size:11px; display:flex; align-items:center; justify-content:center;">1</div>
+                <div style="flex:1; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #eee2d5; padding-bottom:9px;"><span style="font-size:13px; color:#3d342c;">Andning &amp; uppvärmning</span><span style="font-size:12px; color:#a08a73;">4 min</span></div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:26px; height:26px; flex:none; border-radius:99px; background:#e8dccd; color:#6d6055; font-size:11px; display:flex; align-items:center; justify-content:center;">2</div>
+                <div style="flex:1; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #eee2d5; padding-bottom:9px;"><span style="font-size:13px; color:#3d342c;">Flow – solhälsning</span><span style="font-size:12px; color:#a08a73;">8 min</span></div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:26px; height:26px; flex:none; border-radius:99px; background:#e8dccd; color:#6d6055; font-size:11px; display:flex; align-items:center; justify-content:center;">3</div>
+                <div style="flex:1; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #eee2d5; padding-bottom:9px;"><span style="font-size:13px; color:#3d342c;">Stabilitet &amp; balans</span><span style="font-size:12px; color:#a08a73;">5 min</span></div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:26px; height:26px; flex:none; border-radius:99px; background:#e8dccd; color:#6d6055; font-size:11px; display:flex; align-items:center; justify-content:center;">4</div>
+                <div style="flex:1; display:flex; justify-content:space-between; align-items:baseline; padding-bottom:9px;"><span style="font-size:13px; color:#3d342c;">Nedvarvning</span><span style="font-size:12px; color:#a08a73;">3 min</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none; padding:14px 24px 26px; background:linear-gradient(180deg,rgba(250,244,238,0),#faf4ee 40%); display:flex; gap:12px; align-items:center;">
+          <div style="flex:1; background:#3d342c; color:#faf4ee; text-align:center; padding:16px; border-radius:999px; font-size:15px; letter-spacing:.04em;">Starta passet</div>
+          <div style="width:52px; height:52px; flex:none; border-radius:99px; border:1px solid #ddcdb9; color:#8a6a4f; display:flex; align-items:center; justify-content:center; font-size:13px;">↓</div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Ny skärm: svarar på "är det här rätt för mig just nu" med utrustning, upplägg och en tydlig primär åtgärd.</div>
+    </div>
+
+    <!-- 4. RESET -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">04 · Återhämtning</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Reset</div>
+      </div>
+      <div data-screen-label="04 Reset" style="width:360px; height:760px; border-radius:34px; background:#f6efe9; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column; position:relative;">
+        <div style="flex:none; padding:38px 24px 0; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:38px; letter-spacing:.2em; color:#3d342c;">RESET</div>
+          <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:#7d6f62;">Andning, vila och stillhet</div>
+        </div>
+
+        <div style="flex:none; padding:30px 0 26px; display:flex; flex-direction:column; align-items:center; gap:18px;">
+          <div style="width:196px; height:196px; border-radius:50%; border:1px solid #e0d0bd; display:flex; align-items:center; justify-content:center;">
+            <div style="width:152px; height:152px; border-radius:50%; background:#efe2d3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;">
+              <div style="font-family:'Cormorant Garamond',serif; font-size:30px; color:#3d342c;">4 · 7 · 8</div>
+              <div style="font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8b7d6f;">Andas in</div>
+            </div>
+          </div>
+          <div style="font-size:12px; color:#8b7d6f;">3 minuter · sänk pulsen före sömn</div>
+          <div style="background:#3d342c; color:#faf4ee; padding:13px 30px; border-radius:999px; font-size:14px;">Börja andas</div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:6px 24px 0; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Korta sessioner</div>
+            <div style="font-size:12px; color:#8a6a4f; letter-spacing:.04em;">Visa alla 12</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="background:#fdf8f3; border-radius:18px; padding:14px; display:flex; gap:13px; align-items:center;">
+              <div style="width:46px; height:46px; flex:none; border-radius:14px; background:url('uploads/woman-practices-yoga-on-mat-indoors-2026-01-07-01-25-40-utc.jpg') 50% 45%/cover no-repeat;"></div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;"><div style="font-size:14px; color:#3d342c;">Kvällsnedvarvning</div><div style="font-size:11px; color:#8b7d6f;">10 min · guidad</div></div>
+              <div style="color:#8a6a4f; font-size:13px;">▸</div>
+            </div>
+            <div style="background:#fdf8f3; border-radius:18px; padding:14px; display:flex; gap:13px; align-items:center;">
+              <div style="width:46px; height:46px; flex:none; border-radius:14px; background:url('uploads/yoga-girl2.png') 50% 30%/cover no-repeat;"></div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;"><div style="font-size:14px; color:#3d342c;">Stretch för stel rygg</div><div style="font-size:11px; color:#8b7d6f;">8 min · rörlighet</div></div>
+              <div style="color:#8a6a4f; font-size:13px;">▸</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:72px; background:#f1e7dc; border-top:1px solid #e6d9ca; display:grid; grid-template-columns:repeat(4,1fr); align-items:center; padding-bottom:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.6 10 3.4l6.8 5.2V16a1 1 0 0 1-1 1h-3.4v-4.6H7.6V17H4.2a1 1 0 0 1-1-1z"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Hem</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#8a6a4f;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 10h2.9l2.2-5.6 3 11.2 2.3-5.6h4.8"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Träning</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 9.2h14.4a7.2 7.2 0 0 1-14.4 0z"></path><path d="M10 6.4c0-1.5.9-2.3 1.8-2.9"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Kost</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="14" height="12.2" rx="2.4"></rect><path d="M3 8.6h14M7 3.2v2.6M13 3.2v2.6"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Rutin</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Motvikten till Power. En enda övning erbjuds först – resten ligger under, så skärmen känns lugn.</div>
+    </div>
+
+    <!-- 5. NÄRING -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">05 · Kost</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Recept</div>
+      </div>
+      <div data-screen-label="05 Näring" style="width:360px; height:760px; border-radius:34px; background:#faf4ee; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column;">
+        <div style="flex:none; padding:36px 22px 0; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="font-family:'Cormorant Garamond',serif; font-size:30px; color:#3d342c;">Näring</div>
+            <div style="font-size:13px; color:#8b7d6f; line-height:1.6;">Enkla recept med råvaror du redan har hemma</div>
+          </div>
+          <div style="background:#f1e7dc; border:1px solid #e6d9ca; border-radius:999px; padding:12px 18px; font-size:13px; color:#a08a73;">Sök recept eller råvara</div>
+          <div style="display:flex; gap:9px;">
+            <div style="background:#3d342c; color:#faf4ee; padding:8px 15px; border-radius:999px; font-size:12px;">Efter passet</div>
+            <div style="background:#f1e7dc; color:#6d6055; padding:8px 15px; border-radius:999px; font-size:12px; border:1px solid #e6d9ca;">Frukost</div>
+            <div style="background:#f1e7dc; color:#6d6055; padding:8px 15px; border-radius:999px; font-size:12px; border:1px solid #e6d9ca;">Under 20 min</div>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:20px 22px 0; display:flex; flex-direction:column; gap:14px;">
+          <div style="position:relative; height:180px; border-radius:22px; overflow:hidden; background:repeating-linear-gradient(135deg,#e3d2bf 0 7px,#dbc8b2 7px 14px);">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(45,38,31,.3),rgba(45,38,31,.78));"></div>
+            <div style="position:absolute; top:14px; left:16px; font-family:'Jost',monospace; font-size:9px; letter-spacing:.12em; color:rgba(255,255,255,.8);">BILD: SKÅLAR MED GRÖNT</div>
+            <div style="position:absolute; left:16px; right:16px; bottom:14px; display:flex; flex-direction:column; gap:9px;">
+              <div style="font-family:'Cormorant Garamond',serif; font-size:26px; color:#fff;">Proteinbowl med linser</div>
+              <div style="display:flex; gap:8px;">
+                <div style="background:rgba(250,244,238,.22); color:#fff; font-size:11px; padding:5px 11px; border-radius:99px;">15 min</div>
+                <div style="background:rgba(250,244,238,.22); color:#fff; font-size:11px; padding:5px 11px; border-radius:99px;">28 g protein</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#f4ebe1; border-radius:20px; padding:14px; display:flex; gap:14px; align-items:center;">
+            <div style="width:68px; height:68px; flex:none; border-radius:16px; background:repeating-linear-gradient(135deg,#dfd3c6 0 6px,#d6c8b9 6px 12px);"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:5px;">
+              <div style="font-size:15px; color:#3d342c;">Havregrynsgröt med tahini</div>
+              <div style="font-size:12px; color:#8b7d6f;">10 min · frukost · 12 g protein</div>
+            </div>
+          </div>
+
+          <div style="background:#f4ebe1; border-radius:20px; padding:14px; display:flex; gap:14px; align-items:center;">
+            <div style="width:68px; height:68px; flex:none; border-radius:16px; background:repeating-linear-gradient(135deg,#e6dbcd 0 6px,#ded1c0 6px 12px);"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:5px;">
+              <div style="font-size:15px; color:#3d342c;">Kikärtsgryta med spenat</div>
+              <div style="font-size:12px; color:#8b7d6f;">25 min · middag · 22 g protein</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:2px 4px;">
+            <div style="font-size:12px; color:#8b7d6f;">Veckans inköpslista är uppdaterad</div>
+            <div style="font-size:12px; color:#8a6a4f;">Öppna</div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:72px; background:#f4ebe1; border-top:1px solid #e6d9ca; display:grid; grid-template-columns:repeat(4,1fr); align-items:center; padding-bottom:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.6 10 3.4l6.8 5.2V16a1 1 0 0 1-1 1h-3.4v-4.6H7.6V17H4.2a1 1 0 0 1-1-1z"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Hem</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 10h2.9l2.2-5.6 3 11.2 2.3-5.6h4.8"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Träning</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#8a6a4f;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 9.2h14.4a7.2 7.2 0 0 1-14.4 0z"></path><path d="M10 6.4c0-1.5.9-2.3 1.8-2.9"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Kost</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="14" height="12.2" rx="2.4"></rect><path d="M3 8.6h14M7 3.2v2.6M13 3.2v2.6"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Rutin</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Kopplar kosten till träningen: filtret "Efter passet" är förvalt när användaren nyss avslutat ett pass.</div>
+    </div>
+
+    <!-- 6. RUTIN -->
+    <div style="display:flex; flex-direction:column; gap:14px; width:360px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#a08a73;">06 · Överblick</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Min rutin</div>
+      </div>
+      <div data-screen-label="06 Min rutin" style="width:360px; height:760px; border-radius:34px; background:#faf4ee; box-shadow:0 26px 60px -24px rgba(90,70,52,.45); overflow:hidden; display:flex; flex-direction:column;">
+        <div style="flex:none; padding:36px 22px 0; display:flex; flex-direction:column; gap:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="font-family:'Cormorant Garamond',serif; font-size:30px; color:#3d342c;">Min rutin</div>
+              <div style="font-size:13px; color:#8b7d6f;">Vecka 38</div>
+            </div>
+            <div style="width:46px; height:46px; border-radius:99px; background:url('uploads/yoga-girl2.png') 50% 28%/cover no-repeat;"></div>
+          </div>
+
+          <div style="background:#f1e7dc; border-radius:24px; padding:20px; display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <div style="font-size:13px; color:#6d6055;">3 av 4 pass klara</div>
+              <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">75%</div>
+            </div>
+            <div style="height:6px; border-radius:99px; background:#e2d3c1; overflow:hidden;"><div style="width:75%; height:100%; background:#b99e85;"></div></div>
+            <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">M</div><div style="width:100%; height:30px; border-radius:9px; background:#b99e85;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">T</div><div style="width:100%; height:30px; border-radius:9px; background:#e2d3c1;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">O</div><div style="width:100%; height:30px; border-radius:9px; background:#b99e85;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">T</div><div style="width:100%; height:30px; border-radius:9px; background:#e2d3c1;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">F</div><div style="width:100%; height:30px; border-radius:9px; background:#b99e85;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">L</div><div style="width:100%; height:30px; border-radius:9px; background:#efe2d3; border:1px dashed #d9c7b2;"></div></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:7px;"><div style="font-size:10px; color:#a08a73;">S</div><div style="width:100%; height:30px; border-radius:9px; background:#efe2d3; border:1px dashed #d9c7b2;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow:hidden; padding:22px 22px 0; display:flex; flex-direction:column; gap:14px;">
+          <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#3d342c;">Idag</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:13px; align-items:center; background:#f4ebe1; border-radius:18px; padding:14px;">
+              <div style="width:30px; height:30px; flex:none; border-radius:99px; background:#b99e85; color:#fff; font-size:13px; display:flex; align-items:center; justify-content:center;">✓</div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;"><div style="font-size:14px; color:#3d342c;">Morning flow</div><div style="font-size:11px; color:#8b7d6f;">20 min · klart 07:15</div></div>
+            </div>
+            <div style="display:flex; gap:13px; align-items:center; background:#f4ebe1; border-radius:18px; padding:14px;">
+              <div style="width:30px; height:30px; flex:none; border-radius:99px; border:1px solid #d9c7b2;"></div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;"><div style="font-size:14px; color:#3d342c;">Proteinbowl med linser</div><div style="font-size:11px; color:#8b7d6f;">Lunch · 15 min</div></div>
+            </div>
+            <div style="display:flex; gap:13px; align-items:center; background:#f4ebe1; border-radius:18px; padding:14px;">
+              <div style="width:30px; height:30px; flex:none; border-radius:99px; border:1px solid #d9c7b2;"></div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;"><div style="font-size:14px; color:#3d342c;">Kvällsnedvarvning</div><div style="font-size:11px; color:#8b7d6f;">10 min · 21:30</div></div>
+            </div>
+          </div>
+          <div style="margin-top:4px; border:1px solid #eadfd1; border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:17px; color:#3d342c;">Din rutin håller i 5 veckor</div>
+            <div style="font-size:12px; line-height:1.6; color:#8b7d6f;">Små pass på vardagar och en längre session i helgen – fortsätt så.</div>
+          </div>
+        </div>
+
+        <div style="flex:none; height:72px; background:#f4ebe1; border-top:1px solid #e6d9ca; display:grid; grid-template-columns:repeat(4,1fr); align-items:center; padding-bottom:8px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 8.6 10 3.4l6.8 5.2V16a1 1 0 0 1-1 1h-3.4v-4.6H7.6V17H4.2a1 1 0 0 1-1-1z"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Hem</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.4 10h2.9l2.2-5.6 3 11.2 2.3-5.6h4.8"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Träning</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#b3a394;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 9.2h14.4a7.2 7.2 0 0 1-14.4 0z"></path><path d="M10 6.4c0-1.5.9-2.3 1.8-2.9"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Kost</div></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px; color:#8a6a4f;"><svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="14" height="12.2" rx="2.4"></rect><path d="M3 8.6h14M7 3.2v2.6M13 3.2v2.6"></path></svg><div style="font-size:10px; letter-spacing:.08em;">Rutin</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px; line-height:1.6; color:#7d6f62; max-width:340px;">Stöder designmålet "hållbar livsstil": veckan visas som rytm, inte som siffror att jaga.</div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
