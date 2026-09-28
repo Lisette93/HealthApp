@@ -1,4 +1,4 @@
-# Handoff: Balans – health app (mobil)
+# HealthApp — Balans
 
 ## Overview
 Balans är en mobilapp som samlar träning, återhämtning och kost på ett ställe. Målet är att förenkla vardagens beslut kring välmående: användaren får ett val i taget ("Vad behöver din kropp idag?"), korta pass (15–30 min) som går att göra hemma, samt en lugn överblick över veckan i stället för mätvärden att jaga.
