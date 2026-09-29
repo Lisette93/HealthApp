@@ -14,6 +14,11 @@ const screens = {
     title: '03 Passdetalj',
     type: 'detail'
   },
+  player: {
+    key: 'player',
+    title: 'Passpelare',
+    type: 'player'
+  },
   reset: {
     key: 'reset',
     title: '04 Reset',
@@ -31,17 +36,54 @@ const screens = {
   }
 };
 
+const progressStorageKey = 'balans-frontend-progress';
+const defaultWeek = {
+  completed: 3,
+  planned: 4,
+  days: [true, false, true, false, true, false, false],
+  workoutDayIndex: null
+};
+const defaultTasks = [
+  { id: 1, title: 'Morning flow', meta: '20 min · planerat idag', done: false },
+  { id: 2, title: 'Proteinbowl med linser', meta: 'Lunch · 15 min', done: false },
+  { id: 3, title: 'Kvällsnedvarvning', meta: '10 min · 21:30', done: false }
+];
+const savedProgress = loadProgress();
+
 const state = {
   currentScreen: 'home',
   activeTab: 'home',
   favorite: false,
   selectedLevel: 'Nivå 2',
-  tasks: [
-    { id: 1, title: 'Morning flow', meta: '20 min · klart 07:15', done: true },
-    { id: 2, title: 'Proteinbowl med linser', meta: 'Lunch · 15 min', done: false },
-    { id: 3, title: 'Kvällsnedvarvning', meta: '10 min · 21:30', done: false }
-  ]
+  recipeFilter: 'quick',
+  recipeFilterManuallySet: false,
+  lastWorkoutCompletedAt: savedProgress.lastWorkoutCompletedAt || null,
+  week: {
+    ...defaultWeek,
+    ...(savedProgress.week || {}),
+    days: savedProgress.week?.days || [...defaultWeek.days]
+  },
+  player: {
+    started: false,
+    running: false,
+    completed: false,
+    stepIndex: 0,
+    secondsLeft: 240
+  },
+  tasks: defaultTasks.map((task) => ({
+    ...task,
+    ...(savedProgress.tasks?.find((savedTask) => savedTask.id === task.id) || {})
+  }))
 };
+
+const workoutSteps = [
+  { title: 'Andning & uppvärmning', minutes: 4, cue: 'Hitta ett lugnt andetag och mjuka upp kroppen.' },
+  { title: 'Flow – solhälsning', minutes: 8, cue: 'Rör dig mjukt mellan positionerna i ditt eget tempo.' },
+  { title: 'Stabilitet & balans', minutes: 5, cue: 'Håll fokus på stadig grund och jämn andning.' },
+  { title: 'Nedvarvning', minutes: 3, cue: 'Sänk tempot och låt kroppen landa.' }
+];
+
+let workoutTimer = null;
 
 const tabConfig = [
   { key: 'home', label: 'Hem', icon: homeIcon },
@@ -89,23 +131,26 @@ const app = document.querySelector('#app');
 function render() {
   const screen = screens[state.currentScreen];
   const isReset = state.currentScreen === 'reset';
+  const isPlayer = state.currentScreen === 'player';
 
   app.innerHTML = `
-    <div class="phone ${isReset ? 'reset-screen' : ''}">
+    <div class="phone ${isReset ? 'reset-screen' : ''} ${isPlayer ? 'player-screen' : ''}">
       <div class="app-content">
         ${renderScreen(screen)}
       </div>
-      <nav class="tab-bar" aria-label="Tabbar">
-        ${tabConfig.map((tab) => {
-          const active = state.activeTab === tab.key ? 'active' : '';
-          return `
-            <button class="tab ${active}" type="button" data-tab="${tab.key}" aria-label="${tab.label}">
-              ${tab.icon()}
-              <span class="label">${tab.label}</span>
-            </button>
-          `;
-        }).join('')}
-      </nav>
+      ${isPlayer ? '' : `
+        <nav class="tab-bar" aria-label="Tabbar">
+          ${tabConfig.map((tab) => {
+            const active = state.activeTab === tab.key ? 'active' : '';
+            return `
+              <button class="tab ${active}" type="button" data-tab="${tab.key}" aria-label="${tab.label}">
+                ${tab.icon()}
+                <span class="label">${tab.label}</span>
+              </button>
+            `;
+          }).join('')}
+        </nav>
+      `}
     </div>
   `;
 
@@ -259,11 +304,14 @@ function renderScreen(screen) {
           </div>
 
           <div class="bottom-action">
-            <button class="primary-button" type="button" data-screen="reset">Starta passet</button>
+            <button class="primary-button" type="button" data-player-start>${state.player.started && !state.player.completed ? 'Fortsätt passet' : 'Starta passet'}</button>
             <button class="secondary-button" type="button" aria-label="Ladda ner offline">↓</button>
           </div>
         </div>
       `;
+
+    case 'player':
+      return renderPlayer();
 
     case 'reset':
       return `
@@ -313,7 +361,8 @@ function renderScreen(screen) {
         </div>
       `;
 
-    case 'nutrition':
+    case 'nutrition': {
+      const recipeFilter = getActiveRecipeFilter();
       return `
         <div class="nutrition-wrap">
           <div class="nutrition-header">
@@ -323,14 +372,14 @@ function renderScreen(screen) {
             <p class="subcopy">Enkla recept med råvaror du redan har hemma</p>
             <div class="search-bar">Sök recept eller råvara</div>
             <div class="chip-row">
-              <button class="chip active" type="button">Efter passet</button>
-              <button class="chip" type="button">Frukost</button>
-              <button class="chip" type="button">Under 20 min</button>
+              <button class="chip ${recipeFilter === 'post-workout' ? 'active' : ''}" type="button" data-recipe-filter="post-workout">Efter passet</button>
+              <button class="chip ${recipeFilter === 'breakfast' ? 'active' : ''}" type="button" data-recipe-filter="breakfast">Frukost</button>
+              <button class="chip ${recipeFilter === 'quick' ? 'active' : ''}" type="button" data-recipe-filter="quick">Under 20 min</button>
             </div>
           </div>
 
           <div class="nutrition-body">
-            <div class="hero-recipe" style="background-image:url('design/uploads/bowl-of-fresh-salad-with-cooked-meat-2026-03-25-04-27-28-utc.jpg'); background-size:cover; background-position:50% 50%;">
+            <div class="hero-recipe recipe-item" data-recipe-tags="post-workout quick" ${recipeMatchesFilter(recipeFilter, 'post-workout quick') ? '' : 'hidden'} style="background-image:url('design/uploads/bowl-of-fresh-salad-with-cooked-meat-2026-03-25-04-27-28-utc.jpg'); background-size:cover; background-position:50% 50%;">
               <div class="label-tag">BILD: SKÅLAR MED GRÖNT</div>
               <div class="text-wrap">
                 <h3>Proteinbowl med linser</h3>
@@ -341,7 +390,7 @@ function renderScreen(screen) {
               </div>
             </div>
 
-            <div class="recipe-row">
+            <div class="recipe-row recipe-item" data-recipe-tags="breakfast quick" ${recipeMatchesFilter(recipeFilter, 'breakfast quick') ? '' : 'hidden'}>
               <div class="recipe-thumb" style="background-image:url('design/uploads/oatmeal-cereal-with-blueberries-for-healthy-breakf-2026-03-09-05-15-14-utc.jpg'); background-size:cover; background-position:50% 50%;"></div>
               <div class="recipe-copy">
                 <strong>Havregrynsgröt med tahini</strong>
@@ -349,7 +398,7 @@ function renderScreen(screen) {
               </div>
             </div>
 
-            <div class="recipe-row">
+            <div class="recipe-row recipe-item" data-recipe-tags="post-workout" ${recipeMatchesFilter(recipeFilter, 'post-workout') ? '' : 'hidden'}>
               <div class="recipe-thumb" style="background-image:url('design/uploads/savory-chickpea-curry-in-a-black-bowl-with-lemon-w-2026-06-30-23-13-18-utc.jpg'); background-size:cover; background-position:50% 50%;"></div>
               <div class="recipe-copy">
                 <strong>Kikärtsgryta med spenat</strong>
@@ -364,6 +413,7 @@ function renderScreen(screen) {
           </div>
         </div>
       `;
+    }
 
     case 'routine':
       return `
@@ -379,18 +429,14 @@ function renderScreen(screen) {
 
             <div class="routine-card">
               <div class="routine-summary">
-                <span>3 av 4 pass klara</span>
-                <strong>75%</strong>
+                <span>${state.week.completed} av ${state.week.planned} pass klara</span>
+                <strong>${Math.round((state.week.completed / state.week.planned) * 100)}%</strong>
               </div>
-              <div class="progress-track"><span class="progress-fill" style="width:75%"></span></div>
+              <div class="progress-track"><span class="progress-fill" style="width:${(state.week.completed / state.week.planned) * 100}%"></span></div>
               <div class="week-grid">
-                <div class="day-cell"><span class="letter">M</span><div class="day-bar done"></div></div>
-                <div class="day-cell"><span class="letter">T</span><div class="day-bar"></div></div>
-                <div class="day-cell"><span class="letter">O</span><div class="day-bar done"></div></div>
-                <div class="day-cell"><span class="letter">T</span><div class="day-bar"></div></div>
-                <div class="day-cell"><span class="letter">F</span><div class="day-bar done"></div></div>
-                <div class="day-cell"><span class="letter">L</span><div class="day-bar tomorrow"></div></div>
-                <div class="day-cell"><span class="letter">S</span><div class="day-bar tomorrow"></div></div>
+                ${['M', 'T', 'O', 'T', 'F', 'L', 'S'].map((day, index) => `
+                  <div class="day-cell"><span class="letter">${day}</span><div class="day-bar ${state.week.days[index] ? 'done' : index > 4 ? 'tomorrow' : ''}"></div></div>
+                `).join('')}
               </div>
             </div>
           </div>
@@ -422,6 +468,42 @@ function renderScreen(screen) {
 }
 
 function bindEvents() {
+  document.querySelectorAll('[data-player-start]').forEach((button) => {
+    button.addEventListener('click', startWorkout);
+  });
+
+  document.querySelectorAll('[data-player-pause]').forEach((button) => {
+    button.addEventListener('click', toggleWorkoutTimer);
+  });
+
+  document.querySelectorAll('[data-player-next]').forEach((button) => {
+    button.addEventListener('click', advanceWorkoutStep);
+  });
+
+  document.querySelectorAll('[data-player-exit]').forEach((button) => {
+    button.addEventListener('click', () => {
+      pauseWorkoutTimer();
+      state.currentScreen = 'detail';
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-completion-nav]').forEach((button) => {
+    button.addEventListener('click', () => {
+      pauseWorkoutTimer();
+      const target = button.dataset.completionNav;
+      state.currentScreen = target;
+      state.activeTab = target;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-player-done]').forEach((button) => {
+    button.addEventListener('click', () => {
+      completeWorkout();
+    });
+  });
+
   document.querySelectorAll('[data-screen]').forEach((button) => {
     button.addEventListener('click', () => {
       const target = button.dataset.screen;
@@ -456,9 +538,21 @@ function bindEvents() {
   document.querySelectorAll('[data-task-toggle]').forEach((button) => {
     button.addEventListener('click', () => {
       const id = Number(button.dataset.taskToggle);
-      state.tasks = state.tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      );
+      const task = state.tasks.find((item) => item.id === id);
+      if (task) {
+        task.done = !task.done;
+        if (id === 1) updateWorkoutRoutine(task.done);
+        if (id === 1 && !task.done) task.meta = '20 min · planerat idag';
+        saveProgress();
+      }
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-recipe-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.recipeFilter = button.dataset.recipeFilter;
+      state.recipeFilterManuallySet = true;
       render();
     });
   });
@@ -471,6 +565,212 @@ function bindEvents() {
       render();
     });
   });
+}
+
+function renderPlayer() {
+  const { player } = state;
+  const currentStep = workoutSteps[player.stepIndex];
+  const totalSeconds = workoutSteps.reduce((total, step) => total + step.minutes * 60, 0);
+  const elapsedSeconds = totalSeconds - workoutSteps
+    .slice(player.stepIndex + 1)
+    .reduce((total, step) => total + step.minutes * 60, 0) - player.secondsLeft;
+  const progress = player.completed ? 100 : Math.max(0, Math.min(100, (elapsedSeconds / totalSeconds) * 100));
+  const minutes = Math.floor(player.secondsLeft / 60).toString().padStart(2, '0');
+  const seconds = (player.secondsLeft % 60).toString().padStart(2, '0');
+
+  if (player.completed) {
+    return `
+      <div class="player-complete">
+        <div class="complete-mark" aria-hidden="true">✓</div>
+        <p class="player-kicker">MORNING FLOW · 20 MIN</p>
+        <h1>Fint jobbat, Elin.</h1>
+        <p class="player-cue">Du har genomfört hela passet. Ta en stund och känn efter hur kroppen mår.</p>
+        <div class="completion-actions">
+          <button class="primary-button" type="button" data-completion-nav="routine">Visa min rutin</button>
+          <button class="completion-secondary" type="button" data-completion-nav="nutrition">Hitta något gott</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="player-layout">
+      <header class="player-header">
+        <button class="icon-button" type="button" data-player-exit aria-label="Avsluta spelaren">←</button>
+        <div class="player-header-copy">
+          <span class="player-kicker">MORNING FLOW</span>
+          <span class="player-step-count">STEG ${player.stepIndex + 1} AV ${workoutSteps.length}</span>
+        </div>
+        <span class="player-header-spacer" aria-hidden="true"></span>
+      </header>
+
+      <div class="player-progress" aria-label="Passförlopp">
+        <div class="progress-track"><span class="progress-fill" style="width:${progress}%"></span></div>
+      </div>
+
+      <main class="player-main">
+        <div class="player-orbit" aria-hidden="true">
+          <div class="player-orbit-inner ${player.running ? 'is-running' : ''}">
+            <span class="player-timer" aria-live="off">${minutes}:${seconds}</span>
+            <span class="player-timer-label">KVAR I STEGET</span>
+          </div>
+        </div>
+        <p class="player-kicker">BLOCK ${String(player.stepIndex + 1).padStart(2, '0')}</p>
+        <h1 class="player-step-title">${currentStep.title}</h1>
+        <p class="player-cue">${currentStep.cue}</p>
+      </main>
+
+      <div class="player-step-list">
+        ${workoutSteps.map((step, index) => `
+          <div class="player-step-row ${index === player.stepIndex ? 'current' : ''} ${index < player.stepIndex ? 'passed' : ''}">
+            <span class="player-step-index">${index < player.stepIndex ? '✓' : String(index + 1).padStart(2, '0')}</span>
+            <span class="player-step-name">${step.title}</span>
+            <span class="player-step-duration">${step.minutes} min</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <footer class="player-controls">
+        <button class="player-control-secondary" type="button" data-player-exit aria-label="Lämna passet">Lämna</button>
+        <button class="player-control-primary" type="button" data-player-pause>${player.running ? 'Pausa' : 'Fortsätt'}</button>
+        <button class="player-control-secondary" type="button" data-player-next>${player.stepIndex === workoutSteps.length - 1 ? 'Avsluta' : 'Nästa'}</button>
+      </footer>
+    </div>
+  `;
+}
+
+function startWorkout() {
+  if (!state.player.started || state.player.completed) {
+    state.player = {
+      started: true,
+      running: false,
+      completed: false,
+      stepIndex: 0,
+      secondsLeft: workoutSteps[0].minutes * 60
+    };
+  }
+
+  state.currentScreen = 'player';
+  state.activeTab = 'power';
+  state.player.running = true;
+  render();
+  workoutTimer = window.setInterval(tickWorkoutTimer, 1000);
+}
+
+function toggleWorkoutTimer() {
+  if (state.player.running) {
+    pauseWorkoutTimer();
+  } else {
+    state.player.running = true;
+    workoutTimer = window.setInterval(tickWorkoutTimer, 1000);
+  }
+  render();
+}
+
+function pauseWorkoutTimer() {
+  if (workoutTimer !== null) {
+    window.clearInterval(workoutTimer);
+    workoutTimer = null;
+  }
+  state.player.running = false;
+}
+
+function tickWorkoutTimer() {
+  if (state.player.secondsLeft > 1) {
+    state.player.secondsLeft -= 1;
+    updatePlayerTimerDisplay();
+    return;
+  }
+  advanceWorkoutStep();
+}
+
+function advanceWorkoutStep() {
+  if (state.player.stepIndex >= workoutSteps.length - 1) {
+    completeWorkout();
+    return;
+  }
+
+  state.player.stepIndex += 1;
+  state.player.secondsLeft = workoutSteps[state.player.stepIndex].minutes * 60;
+  render();
+}
+
+function completeWorkout() {
+  pauseWorkoutTimer();
+  const workoutTask = state.tasks.find((task) => task.id === 1);
+  if (workoutTask && !workoutTask.done) {
+    workoutTask.done = true;
+    workoutTask.meta = `20 min · klart ${new Intl.DateTimeFormat('sv-SE', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
+    updateWorkoutRoutine(true);
+  }
+  state.lastWorkoutCompletedAt = Date.now();
+  state.recipeFilter = 'post-workout';
+  state.recipeFilterManuallySet = false;
+  state.player.completed = true;
+  state.currentScreen = 'player';
+  saveProgress();
+  render();
+}
+
+function loadProgress() {
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(progressStorageKey) || '{}');
+    return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress() {
+  try {
+    window.localStorage.setItem(progressStorageKey, JSON.stringify({
+      lastWorkoutCompletedAt: state.lastWorkoutCompletedAt,
+      week: state.week,
+      tasks: state.tasks
+    }));
+  } catch {
+    // Keep the prototype usable when storage is unavailable.
+  }
+}
+
+function updateWorkoutRoutine(done) {
+  const { week } = state;
+  if (done) {
+    if (week.workoutDayIndex !== null || week.completed >= week.planned) return;
+    const dayIndex = week.days.slice(0, 5).findIndex((isDone) => !isDone);
+    if (dayIndex !== -1) {
+      week.days[dayIndex] = true;
+      week.workoutDayIndex = dayIndex;
+      week.completed += 1;
+    }
+    return;
+  }
+
+  if (week.workoutDayIndex !== null) {
+    week.days[week.workoutDayIndex] = false;
+    week.workoutDayIndex = null;
+    week.completed = Math.max(0, week.completed - 1);
+  }
+}
+
+function getActiveRecipeFilter() {
+  const recentWorkout = state.lastWorkoutCompletedAt !== null &&
+    Date.now() - state.lastWorkoutCompletedAt < 2 * 60 * 60 * 1000;
+  if (recentWorkout && !state.recipeFilterManuallySet) return 'post-workout';
+  if (state.recipeFilter === 'post-workout' && !recentWorkout) return 'quick';
+  return state.recipeFilter;
+}
+
+function recipeMatchesFilter(filter, tags) {
+  return tags.split(' ').includes(filter);
+}
+
+function updatePlayerTimerDisplay() {
+  const timer = document.querySelector('.player-timer');
+  if (!timer) return;
+  const minutes = Math.floor(state.player.secondsLeft / 60).toString().padStart(2, '0');
+  const seconds = (state.player.secondsLeft % 60).toString().padStart(2, '0');
+  timer.textContent = `${minutes}:${seconds}`;
 }
 
 render();
