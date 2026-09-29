@@ -54,7 +54,9 @@ const state = {
   currentScreen: 'home',
   activeTab: 'home',
   favorite: false,
-  selectedLevel: 'Nivå 2',
+  trainingFilters: { level: 2, duration: null, tempo: null },
+  breathing: { started: false, running: false, phaseIndex: 0, secondsLeft: 4, sessionSecondsLeft: 180 },
+  recipeSearch: '',
   recipeFilter: 'quick',
   recipeFilterManuallySet: false,
   lastWorkoutCompletedAt: savedProgress.lastWorkoutCompletedAt || null,
@@ -84,6 +86,13 @@ const workoutSteps = [
 ];
 
 let workoutTimer = null;
+let breathingTimer = null;
+const breathingPhases = [
+  { label: 'ANDAS IN', seconds: 4 },
+  { label: 'HÅLL', seconds: 7 },
+  { label: 'ANDAS UT', seconds: 8 }
+];
+const tempoLabels = { calm: 'Lugnt', medium: 'Medel', high: 'Högt' };
 
 const tabConfig = [
   { key: 'home', label: 'Hem', icon: homeIcon },
@@ -161,16 +170,16 @@ function renderScreen(screen) {
   switch (screen.key) {
     case 'home':
       return `
-        <div style="display:flex; flex-direction:column; height:100%;">
+        <div class="home-screen" style="display:flex; flex-direction:column; height:100%;">
           <div class="hero" style="background-image:url('design/uploads/yoga-girl.png');">
             <div class="hero-content">
               <h1 class="hero-greeting">God morgon, Elin</h1>
               <p class="muted-copy">Du har gjort 3 pass den här veckan</p>
-              <button class="cta-button" type="button">Testa appen gratis</button>
+                  <button class="cta-button" type="button" data-screen="power">Utforska pass</button>
             </div>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:26px; padding-top:26px; overflow:hidden;">
+          <div class="home-feed" style="display:flex; flex-direction:column; gap:26px; padding-top:26px; overflow:hidden;">
             <div style="display:flex; flex-direction:column; gap:14px;">
               <div style="padding:0 22px;" class="section-title">Vad behöver din kropp idag?</div>
               <div class="option-row">
@@ -189,7 +198,7 @@ function renderScreen(screen) {
             <div class="section-block">
               <div class="section-header">
                 <div class="section-title">Fortsätt där du var</div>
-                <button class="link-button" type="button">Se allt</button>
+                <button class="link-button" type="button" data-screen="power">Se allt</button>
               </div>
               <div class="resume-card">
                 <div class="thumb" style="background-image:url('design/uploads/woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG');"></div>
@@ -206,7 +215,7 @@ function renderScreen(screen) {
 
     case 'power':
       return `
-        <div style="position:relative; flex:1; display:flex; flex-direction:column; overflow:hidden;">
+        <div class="power-screen" style="position:relative; flex:1; display:flex; flex-direction:column; overflow:hidden;">
           <div style="position:absolute; top:-60px; right:-90px; width:260px; height:260px; border-radius:50%; border:1px solid var(--decor-ring);"></div>
           <div style="position:absolute; top:120px; left:-120px; width:240px; height:240px; border-radius:50%; border:1px solid var(--decor-ring);"></div>
 
@@ -216,15 +225,15 @@ function renderScreen(screen) {
           </div>
 
           <div class="filter-row" style="padding-top:24px;">
-            <button class="filter-chip active" type="button"><span class="dot"></span>${state.selectedLevel}</button>
-            <button class="filter-chip" type="button">Tid</button>
-            <button class="filter-chip" type="button">Tempo</button>
+            ${renderTrainingFilter('level', state.trainingFilters.level === null ? 'Nivå' : `Nivå ${state.trainingFilters.level}`)}
+            ${renderTrainingFilter('duration', state.trainingFilters.duration === null ? 'Tid' : `${state.trainingFilters.duration} min`)}
+            ${renderTrainingFilter('tempo', state.trainingFilters.tempo === null ? 'Tempo' : tempoLabels[state.trainingFilters.tempo])}
           </div>
 
           <div class="help-text">Alla pass är 15–30 minuter och anpassade att utföra när och var du vill.</div>
 
           <div class="session-list">
-            <button class="workout-card" type="button" data-screen="detail" style="background-image:url('design/uploads/yoga-girl.png');">
+            <button class="workout-card" type="button" data-screen="detail" data-level="2" data-duration="20" data-tempo="medium" style="background-image:url('design/uploads/yoga-girl.png');">
               <div class="card-header">
                 <div class="title">Morning flow</div>
                 <div class="badge">Populär</div>
@@ -235,7 +244,7 @@ function renderScreen(screen) {
               </div>
             </button>
 
-            <button class="workout-card" type="button" data-screen="detail" style="background-image:url('design/uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG');">
+            <button class="workout-card" type="button" data-screen="detail" data-level="3" data-duration="25" data-tempo="calm" style="background-image:url('design/uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG');">
               <div class="card-header">
                 <div class="title">Core balance</div>
               </div>
@@ -245,7 +254,7 @@ function renderScreen(screen) {
               </div>
             </button>
 
-            <button class="workout-card" type="button" data-screen="detail" style="background-image:url('design/uploads/yoga-girl2.png');">
+            <button class="workout-card" type="button" data-screen="detail" data-level="2" data-duration="30" data-tempo="high" style="background-image:url('design/uploads/yoga-girl2.png');">
               <div class="card-header">
                 <div class="title">Power strength</div>
               </div>
@@ -253,6 +262,7 @@ function renderScreen(screen) {
                 <span class="meta-pill">30 min</span>
               </div>
             </button>
+            <p class="workout-empty" hidden>Inga pass matchar de här filtren.</p>
           </div>
         </div>
       `;
@@ -315,7 +325,7 @@ function renderScreen(screen) {
 
     case 'reset':
       return `
-        <div style="display:flex; flex-direction:column; height:100%;">
+        <div class="reset-layout" style="display:flex; flex-direction:column; height:100%;">
           <div class="phone-header" style="padding-top:38px;">
             <div class="title-display" style="font-size:38px; letter-spacing:.2em; text-align:center;">RESET</div>
             <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--ink-secondary); text-align:center;">Andning, vila och stillhet</div>
@@ -323,20 +333,20 @@ function renderScreen(screen) {
 
           <div class="reset-inner">
             <div class="breathing-orb">
-              <div class="breathing-inner active">
-                <div style="font-family:'Cormorant Garamond',serif; font-size:30px; color:var(--ink);">4 · 7 · 8</div>
-                <div class="breathing-phase">ANDAS IN</div>
+              <div class="breathing-inner ${state.breathing.running ? `active phase-${state.breathing.phaseIndex}` : ''}">
+                <div class="breathing-count" aria-live="polite">${state.breathing.running ? state.breathing.secondsLeft : '4 · 7 · 8'}</div>
+                <div class="breathing-phase">${state.breathing.running ? breathingPhases[state.breathing.phaseIndex].label : 'ANDAS IN'}</div>
               </div>
             </div>
             <div class="reset-subtitle">3 minuter · sänk pulsen före sömn</div>
-            <button class="primary-button" type="button" style="width:auto; padding:13px 30px; flex:0;">Börja andas</button>
+            <button class="primary-button" type="button" data-breathing-toggle style="width:auto; padding:13px 30px; flex:0;">${state.breathing.running ? 'Pausa' : state.breathing.sessionSecondsLeft === 0 ? 'Börja igen' : state.breathing.started ? 'Fortsätt andas' : 'Börja andas'}</button>
           </div>
 
           <div class="reset-actions">
             <div class="section-label-row">
               <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--ink);">Korta sessioner</div>
               <button class="link-button" type="button">Visa alla 12</button>
-            </div>
+                      <button class="link-button" type="button" data-screen="power">Se allt</button>
 
             <div class="session-cards">
               <button class="list-card" type="button" data-screen="reset">
@@ -370,7 +380,7 @@ function renderScreen(screen) {
               <h2>Näring</h2>
             </div>
             <p class="subcopy">Enkla recept med råvaror du redan har hemma</p>
-            <div class="search-bar">Sök recept eller råvara</div>
+            <input class="search-bar" type="search" data-recipe-search placeholder="Sök recept eller råvara" value="${state.recipeSearch || ''}" aria-label="Sök recept eller råvara" />
             <div class="chip-row">
               <button class="chip ${recipeFilter === 'post-workout' ? 'active' : ''}" type="button" data-recipe-filter="post-workout">Efter passet</button>
               <button class="chip ${recipeFilter === 'breakfast' ? 'active' : ''}" type="button" data-recipe-filter="breakfast">Frukost</button>
@@ -468,6 +478,14 @@ function renderScreen(screen) {
 }
 
 function bindEvents() {
+  document.querySelectorAll('[data-training-filter]').forEach((button) => {
+    button.addEventListener('click', () => cycleTrainingFilter(button.dataset.trainingFilter));
+  });
+
+  document.querySelectorAll('[data-breathing-toggle]').forEach((button) => {
+    button.addEventListener('click', toggleBreathing);
+  });
+
   document.querySelectorAll('[data-player-start]').forEach((button) => {
     button.addEventListener('click', startWorkout);
   });
@@ -557,6 +575,11 @@ function bindEvents() {
     });
   });
 
+  document.querySelector('[data-recipe-search]')?.addEventListener('input', (event) => {
+    state.recipeSearch = event.currentTarget.value;
+    updateRecipeList();
+  });
+
   document.querySelectorAll('[data-tab]').forEach((button) => {
     button.addEventListener('click', () => {
       const tab = button.dataset.tab;
@@ -565,6 +588,99 @@ function bindEvents() {
       render();
     });
   });
+
+  updateTrainingList();
+  updateRecipeList();
+}
+
+function renderTrainingFilter(key, label) {
+  const active = state.trainingFilters[key] !== null;
+  return `
+    <button class="filter-chip ${active ? 'active' : ''}" type="button" data-training-filter="${key}">
+      ${active && key === 'level' ? '<span class="dot"></span>' : ''}${label}
+    </button>
+  `;
+}
+
+function cycleTrainingFilter(key) {
+  const options = {
+    level: [1, 2, 3, null],
+    duration: [15, 20, 25, 30, null],
+    tempo: ['calm', 'medium', 'high', null]
+  };
+  const values = options[key];
+  const currentIndex = values.indexOf(state.trainingFilters[key]);
+  state.trainingFilters[key] = values[(currentIndex + 1) % values.length];
+  render();
+}
+
+function updateTrainingList() {
+  const cards = [...document.querySelectorAll('.workout-card[data-level]')];
+  if (!cards.length) return;
+  const visibleCount = cards.filter((card) => {
+    const filters = state.trainingFilters;
+    const matches = (filters.level === null || Number(card.dataset.level) === filters.level) &&
+      (filters.duration === null || Number(card.dataset.duration) === filters.duration) &&
+      (filters.tempo === null || card.dataset.tempo === filters.tempo);
+    card.hidden = !matches;
+    return matches;
+  }).length;
+  const emptyState = document.querySelector('.workout-empty');
+  if (emptyState) emptyState.hidden = visibleCount > 0;
+}
+
+function updateRecipeList() {
+  const items = [...document.querySelectorAll('.recipe-item')];
+  if (!items.length) return;
+  const activeFilter = getActiveRecipeFilter();
+  const query = state.recipeSearch.trim().toLocaleLowerCase('sv-SE');
+  items.forEach((item) => {
+    const matchesFilter = recipeMatchesFilter(activeFilter, item.dataset.recipeTags);
+    const matchesQuery = item.textContent.toLocaleLowerCase('sv-SE').includes(query);
+    item.hidden = !(matchesFilter && matchesQuery);
+  });
+}
+
+function toggleBreathing() {
+  if (state.breathing.running) {
+    window.clearInterval(breathingTimer);
+    breathingTimer = null;
+    state.breathing.running = false;
+    render();
+    return;
+  }
+
+  if (state.breathing.sessionSecondsLeft === 0) {
+    state.breathing = { started: false, running: false, phaseIndex: 0, secondsLeft: 4, sessionSecondsLeft: 180 };
+  }
+  state.breathing.started = true;
+  state.breathing.running = true;
+  render();
+  breathingTimer = window.setInterval(tickBreathing, 1000);
+}
+
+function tickBreathing() {
+  const breathing = state.breathing;
+  breathing.sessionSecondsLeft -= 1;
+  breathing.secondsLeft -= 1;
+  if (breathing.sessionSecondsLeft <= 0) {
+    window.clearInterval(breathingTimer);
+    breathingTimer = null;
+    breathing.running = false;
+    breathing.sessionSecondsLeft = 0;
+    render();
+    return;
+  }
+
+  if (breathing.secondsLeft <= 0) {
+    breathing.phaseIndex = (breathing.phaseIndex + 1) % breathingPhases.length;
+    breathing.secondsLeft = breathingPhases[breathing.phaseIndex].seconds;
+    render();
+    return;
+  }
+
+  const count = document.querySelector('.breathing-count');
+  if (count) count.textContent = breathing.secondsLeft;
 }
 
 function renderPlayer() {

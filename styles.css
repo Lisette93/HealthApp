@@ -73,9 +73,28 @@ button {
 
 .app-content {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: none;
+}
+
+.app-content::-webkit-scrollbar {
+  display: none;
+}
+
+.home-screen {
+  flex: none;
+  min-height: 100%;
+  height: auto !important;
+}
+
+.home-screen .home-feed {
+  flex: none;
+  overflow: visible !important;
 }
 
 .topbar {
@@ -454,6 +473,17 @@ button {
   box-shadow: 0 14px 30px -18px var(--shadow-soft);
 }
 
+.workout-card[hidden] {
+  display: none !important;
+}
+
+.workout-empty {
+  margin: 8px 0;
+  color: var(--ink-tertiary);
+  font-size: 13px;
+  text-align: center;
+}
+
 .workout-card::after {
   content: "";
   position: absolute;
@@ -728,6 +758,13 @@ button {
   transform: scale(1.12);
 }
 
+.breathing-count {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
 .breathing-phase {
   font-size: 11px;
   letter-spacing: 0.14em;
@@ -833,12 +870,24 @@ button {
 }
 
 .search-bar {
+  width: 100%;
   background: var(--surface-3);
   border: 1px solid var(--line-base);
   border-radius: 999px;
   padding: 12px 18px;
   color: var(--ink-quaternary);
   font-size: 13px;
+  font-family: inherit;
+}
+
+.search-bar:focus {
+  outline: 2px solid rgba(138, 106, 79, 0.35);
+  outline-offset: 2px;
+}
+
+.search-bar::placeholder {
+  color: var(--ink-quaternary);
+  opacity: 1;
 }
 
 .chip-row {
@@ -1385,6 +1434,71 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-height: 720px) {
+  .app-content {
+    overflow-y: auto;
+  }
+
+  .phone:not(.player-screen) .app-content {
+    flex: 0 0 calc(100% - 72px);
+    height: calc(100% - 72px);
+  }
+
+  .phone:not(.player-screen) .tab-bar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+  }
+
+  .phone.player-screen .app-content {
+    flex: 0 0 100%;
+    height: 100%;
+  }
+
+  .power-screen,
+  .detail-shell,
+  .nutrition-wrap,
+  .routine-wrap,
+  .player-layout {
+    flex: none;
+    min-height: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .reset-layout {
+    flex: none;
+    min-height: 0;
+    height: auto !important;
+    overflow: visible;
+  }
+
+  .power-screen .session-list {
+    flex: none;
+    overflow: visible;
+    padding-bottom: 20px;
+  }
+
+  .detail-shell .steps-block {
+    padding-bottom: 12px;
+  }
+
+  .nutrition-body {
+    flex: none;
+    padding-bottom: 20px;
+  }
+
+  .reset-layout .reset-actions {
+    padding-bottom: 20px;
+  }
+
+  .routine-wrap .insight-box {
+    margin-bottom: 20px;
   }
 }
 

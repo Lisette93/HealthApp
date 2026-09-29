@@ -1,5 +1,21 @@
 # HealthApp — Balans
 
+## Projektstatus
+Balans är en mobilförst, interaktiv frontend-prototyp för träning, återhämtning, recept och veckorutin. Den är byggd i HTML, CSS och JavaScript utifrån designreferensen nedan och är publicerad på [GitHub Pages](https://lisette93.github.io/HealthApp/).
+
+Prototypen innehåller navigation mellan huvudvyer, en pausbar timer för Morning flow, rutinuppdatering när passet avslutas, 4–7–8-andning samt fungerande tränings- och receptfilter. Rutinstatus och senaste passet sparas lokalt i webbläsaren. Det finns ingen backend, inloggning eller synkronisering mellan enheter; innehåll och statistik är demonstrationsdata och vissa sekundära kontroller leder ännu inte till separata detaljvyer.
+
+### Kör lokalt
+Öppna projektmappen i terminalen och kör:
+
+```bash
+python -m http.server 4173
+```
+
+Öppna sedan `http://localhost:4173/`. Appen har inga paket att installera eller byggsteg.
+
+## Ursprunglig designreferens
+
 ## Overview
 Balans är en mobilapp som samlar träning, återhämtning och kost på ett ställe. Målet är att förenkla vardagens beslut kring välmående: användaren får ett val i taget ("Vad behöver din kropp idag?"), korta pass (15–30 min) som går att göra hemma, samt en lugn överblick över veckan i stället för mätvärden att jaga.
 
