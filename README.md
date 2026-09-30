@@ -3,7 +3,7 @@
 ## Projektstatus
 Balans är en mobilförst, interaktiv frontend-prototyp för träning, återhämtning, recept och veckorutin. Den är byggd i HTML, CSS och JavaScript utifrån designreferensen nedan och är publicerad på [GitHub Pages](https://lisette93.github.io/HealthApp/).
 
-Prototypen innehåller navigation mellan huvudvyer, en pausbar timer för Morning flow, rutinuppdatering när passet avslutas, 4–7–8-andning samt fungerande tränings- och receptfilter. Rutinstatus och senaste passet sparas lokalt i webbläsaren. Det finns ingen backend, inloggning eller synkronisering mellan enheter; innehåll och statistik är demonstrationsdata och vissa sekundära kontroller leder ännu inte till separata detaljvyer.
+Prototypen innehåller navigation mellan huvudvyer, en horisontellt bläddringsbar startvy, sex pass med egna detalj- och timerflöden, rutinuppdatering när passet avslutas, 4–7–8-andning samt sex recept med fungerande filter och sökning. Rutinstatus och senaste passet sparas lokalt i webbläsaren. Det finns ingen backend, inloggning eller synkronisering mellan enheter; innehåll och statistik är demonstrationsdata och vissa sekundära kontroller leder ännu inte till separata detaljvyer.
 
 ### Kör lokalt
 Öppna projektmappen i terminalen och kör:

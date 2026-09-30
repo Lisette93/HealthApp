@@ -54,6 +54,7 @@ const state = {
   currentScreen: 'home',
   activeTab: 'home',
   favorite: false,
+  selectedWorkoutId: 'morning-flow',
   trainingFilters: { level: 2, duration: null, tempo: null },
   breathing: { started: false, running: false, phaseIndex: 0, secondsLeft: 4, sessionSecondsLeft: 180 },
   recipeSearch: '',
@@ -78,11 +79,73 @@ const state = {
   }))
 };
 
-const workoutSteps = [
-  { title: 'Andning & uppvärmning', minutes: 4, cue: 'Hitta ett lugnt andetag och mjuka upp kroppen.' },
-  { title: 'Flow – solhälsning', minutes: 8, cue: 'Rör dig mjukt mellan positionerna i ditt eget tempo.' },
-  { title: 'Stabilitet & balans', minutes: 5, cue: 'Håll fokus på stadig grund och jämn andning.' },
-  { title: 'Nedvarvning', minutes: 3, cue: 'Sänk tempot och låt kroppen landa.' }
+const workouts = [
+  {
+    id: 'morning-flow', title: 'Morning flow', minutes: 20, level: 2, tempo: 'medium', popular: true,
+    image: 'yoga-girl.png',
+    description: 'Ett mjukt men aktivt flöde som väcker höfter, rygg och axlar. Passet börjar lugnt och byggs upp mot stabilitet – passar direkt efter uppstigning.',
+    steps: [
+      { title: 'Andning & uppvärmning', minutes: 4, cue: 'Hitta ett lugnt andetag och mjuka upp kroppen.' },
+      { title: 'Flow – solhälsning', minutes: 8, cue: 'Rör dig mjukt mellan positionerna i ditt eget tempo.' },
+      { title: 'Stabilitet & balans', minutes: 5, cue: 'Håll fokus på stadig grund och jämn andning.' },
+      { title: 'Nedvarvning', minutes: 3, cue: 'Sänk tempot och låt kroppen landa.' }
+    ]
+  },
+  {
+    id: 'core-balance', title: 'Core balance', minutes: 25, level: 3, tempo: 'calm',
+    image: 'woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG',
+    description: 'Ett fokuserat pass med kontrollerade rörelser för bål, höfter och balans. Ta det lugnt och låt varje position få ta plats.',
+    steps: [
+      { title: 'Rörlighet & kontakt', minutes: 5, cue: 'Hitta kontakten med bålen och förbered kroppen.' },
+      { title: 'Styrka från mitten', minutes: 7, cue: 'Arbeta långsamt med stabilitet i varje rörelse.' },
+      { title: 'Balans & kontroll', minutes: 8, cue: 'Håll blicken stadig och rör dig med kontroll.' },
+      { title: 'Stretch & vila', minutes: 5, cue: 'Släpp på spänningar och avsluta mjukt.' }
+    ]
+  },
+  {
+    id: 'power-strength', title: 'Power strength', minutes: 30, level: 2, tempo: 'high',
+    image: 'yoga-girl2.png',
+    description: 'Ett energifyllt helkroppspass med kroppsvikten som motstånd. Välj ett tempo där du fortfarande kan hålla rörelserna stabila.',
+    steps: [
+      { title: 'Dynamisk uppvärmning', minutes: 5, cue: 'Väck kroppen med stora, mjuka rörelser.' },
+      { title: 'Styrkeflöde', minutes: 10, cue: 'Hitta ett jämnt tempo och använd hela rörelsebanan.' },
+      { title: 'Kraft & stabilitet', minutes: 10, cue: 'Håll kroppen stadig när tempot ökar.' },
+      { title: 'Nedvarvning', minutes: 5, cue: 'Sänk pulsen med lugna rörelser och andetag.' }
+    ]
+  },
+  {
+    id: 'gentle-mobility', title: 'Gentle mobility', minutes: 15, level: 1, tempo: 'calm',
+    image: 'woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG',
+    description: 'Ett varsamt rörelsepass för stela axlar, rygg och höfter. Passar när du vill komma igång utan att stressa kroppen.',
+    steps: [
+      { title: 'Landa i andetaget', minutes: 3, cue: 'Börja lugnt och känn efter hur kroppen känns idag.' },
+      { title: 'Mjuk rörlighet', minutes: 4, cue: 'Utforska rörelsen utan att pressa ytterlägen.' },
+      { title: 'Höfter & rygg', minutes: 5, cue: 'Låt andetaget guida mjuka rotationer och sträck.' },
+      { title: 'Vila', minutes: 3, cue: 'Avsluta med några lugna andetag.' }
+    ]
+  },
+  {
+    id: 'pilates-foundation', title: 'Pilates foundation', minutes: 20, level: 2, tempo: 'medium',
+    image: 'woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG',
+    description: 'Bygg styrka med lugna pilatesinspirerade rörelser. Fokus ligger på hållning, andning och ett stabilt centrum.',
+    steps: [
+      { title: 'Andning & hållning', minutes: 4, cue: 'Länga på ryggraden och hitta ett jämnt andetag.' },
+      { title: 'Bålaktivering', minutes: 6, cue: 'Arbeta kontrollerat och behåll kontakten med bålen.' },
+      { title: 'Styrka & stabilitet', minutes: 6, cue: 'Låt rörelsen vara liten, stadig och medveten.' },
+      { title: 'Avslappning', minutes: 4, cue: 'Mjukna i kroppen och låt andningen bli fri.' }
+    ]
+  },
+  {
+    id: 'evening-unwind', title: 'Evening unwind', minutes: 15, level: 1, tempo: 'calm',
+    image: 'woman-practices-yoga-on-mat-indoors-2026-01-07-01-25-40-utc.jpg',
+    description: 'Lugna positioner och mjuka sträck för att varva ner efter dagen. Håll rörelserna bekväma och andas utan ansträngning.',
+    steps: [
+      { title: 'Lugn start', minutes: 3, cue: 'Låt axlarna sjunka och hitta ett långsamt andetag.' },
+      { title: 'Mjuka sträck', minutes: 5, cue: 'Stanna där sträcken känns behaglig.' },
+      { title: 'Vila för ryggen', minutes: 4, cue: 'Låt ryggen vila mot underlaget.' },
+      { title: 'Avslut', minutes: 3, cue: 'Ta några andetag innan du reser dig.' }
+    ]
+  }
 ];
 
 let workoutTimer = null;
@@ -191,7 +254,18 @@ function renderScreen(screen) {
                   <div class="label"><span>RESET</span></div>
                   <div class="subtitle">Andning &amp; vila</div>
                 </button>
-                <div class="feature-card peek-card" style="background-image:url('design/uploads/woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG');"></div>
+                <button class="feature-card" type="button" data-screen="power" style="background-image:url('design/uploads/woman-stretches-on-mat-in-light-filled-room-2026-03-24-05-13-47-utc.JPG');">
+                  <div class="label"><span>RÖRLIGHET</span></div>
+                  <div class="subtitle">Mjukt &amp; följsamt</div>
+                </button>
+                <button class="feature-card" type="button" data-screen="power" style="background-image:url('design/uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG');">
+                  <div class="label"><span>STYRKA</span></div>
+                  <div class="subtitle">Stabilitet &amp; fokus</div>
+                </button>
+                <button class="feature-card reset" type="button" data-screen="reset" style="background-image:url('design/uploads/woman-practices-yoga-on-mat-indoors-2026-01-07-01-25-40-utc.jpg');">
+                  <div class="label"><span>VILA</span></div>
+                  <div class="subtitle">Lugn efter dagen</div>
+                </button>
               </div>
             </div>
 
@@ -233,83 +307,58 @@ function renderScreen(screen) {
           <div class="help-text">Alla pass är 15–30 minuter och anpassade att utföra när och var du vill.</div>
 
           <div class="session-list">
-            <button class="workout-card" type="button" data-screen="detail" data-level="2" data-duration="20" data-tempo="medium" style="background-image:url('design/uploads/yoga-girl.png');">
-              <div class="card-header">
-                <div class="title">Morning flow</div>
-                <div class="badge">Populär</div>
-              </div>
-              <div class="card-footer">
-                <span class="meta-pill">20 min</span>
-                <span class="meta-pill">Nivå 2</span>
-              </div>
-            </button>
-
-            <button class="workout-card" type="button" data-screen="detail" data-level="3" data-duration="25" data-tempo="calm" style="background-image:url('design/uploads/woman-in-white-outfit-stretches-body-on-mat-2026-03-25-04-30-01-utc.JPG');">
-              <div class="card-header">
-                <div class="title">Core balance</div>
-              </div>
-              <div class="card-footer">
-                <span class="meta-pill">25 min</span>
-                <span class="meta-pill">Nivå 3</span>
-              </div>
-            </button>
-
-            <button class="workout-card" type="button" data-screen="detail" data-level="2" data-duration="30" data-tempo="high" style="background-image:url('design/uploads/yoga-girl2.png');">
-              <div class="card-header">
-                <div class="title">Power strength</div>
-              </div>
-              <div class="card-footer">
-                <span class="meta-pill">30 min</span>
-              </div>
-            </button>
+            ${workouts.map((workout) => `
+              <button class="workout-card" type="button" data-screen="detail" data-workout="${workout.id}" data-level="${workout.level}" data-duration="${workout.minutes}" data-tempo="${workout.tempo}" style="background-image:url('design/uploads/${workout.image}');">
+                <div class="card-header">
+                  <div class="title">${workout.title}</div>
+                  ${workout.popular ? '<div class="badge">Populär</div>' : ''}
+                </div>
+                <div class="card-footer">
+                  <span class="meta-pill">${workout.minutes} min</span>
+                  <span class="meta-pill">Nivå ${workout.level}</span>
+                  <span class="meta-pill">${tempoLabels[workout.tempo]}</span>
+                </div>
+              </button>
+            `).join('')}
             <p class="workout-empty" hidden>Inga pass matchar de här filtren.</p>
           </div>
         </div>
       `;
 
-    case 'detail':
+    case 'detail': {
+      const workout = getSelectedWorkout();
       return `
         <div class="detail-shell">
-          <div class="detail-hero" style="background-image:url('design/uploads/yoga-girl.png');">
+          <div class="detail-hero" style="background-image:url('design/uploads/${workout.image}');">
             <div class="top-controls">
               <button class="icon-button" type="button" data-back="power" aria-label="Gå tillbaka">←</button>
               <button class="icon-button" type="button" data-favorite="toggle" aria-label="Favorit">${state.favorite ? '♥' : '♡'}</button>
             </div>
             <div class="title-wrap">
-              <p class="kicker">POWER · FLOW</p>
-              <h2 class="detail-title">Morning flow</h2>
+              <p class="kicker">POWER · ${tempoLabels[workout.tempo].toUpperCase()}</p>
+              <h2 class="detail-title">${workout.title}</h2>
             </div>
           </div>
 
           <div class="meta-grid">
-            <div class="meta-box"><strong>20</strong><span>minuter</span></div>
-            <div class="meta-box"><strong>Nivå 2</strong><span>medel</span></div>
+            <div class="meta-box"><strong>${workout.minutes}</strong><span>minuter</span></div>
+            <div class="meta-box"><strong>Nivå ${workout.level}</strong><span>${tempoLabels[workout.tempo].toLowerCase()}</span></div>
             <div class="meta-box"><strong>Matta</strong><span>utrustning</span></div>
           </div>
 
           <div class="description-block">
-            Ett mjukt men aktivt flöde som väcker höfter, rygg och axlar. Passet börjar lugnt och byggs upp mot stabilitet – passar direkt efter uppstigning.
+            ${workout.description}
           </div>
 
           <div class="steps-block">
             <h3 class="steps-title">Så går passet till</h3>
             <div class="step-list">
-              <div class="step-row">
-                <div class="step-number">1</div>
-                <div class="step-content"><span class="step-name">Andning &amp; uppvärmning</span><span class="step-time">4 min</span></div>
-              </div>
-              <div class="step-row">
-                <div class="step-number">2</div>
-                <div class="step-content"><span class="step-name">Flow – solhälsning</span><span class="step-time">8 min</span></div>
-              </div>
-              <div class="step-row">
-                <div class="step-number">3</div>
-                <div class="step-content"><span class="step-name">Stabilitet &amp; balans</span><span class="step-time">5 min</span></div>
-              </div>
-              <div class="step-row">
-                <div class="step-number">4</div>
-                <div class="step-content"><span class="step-name">Nedvarvning</span><span class="step-time">3 min</span></div>
-              </div>
+              ${workout.steps.map((step, index) => `
+                <div class="step-row">
+                  <div class="step-number">${index + 1}</div>
+                  <div class="step-content"><span class="step-name">${step.title}</span><span class="step-time">${step.minutes} min</span></div>
+                </div>
+              `).join('')}
             </div>
           </div>
 
@@ -319,6 +368,7 @@ function renderScreen(screen) {
           </div>
         </div>
       `;
+    }
 
     case 'player':
       return renderPlayer();
@@ -346,7 +396,7 @@ function renderScreen(screen) {
             <div class="section-label-row">
               <div style="font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--ink);">Korta sessioner</div>
               <button class="link-button" type="button">Visa alla 12</button>
-                      <button class="link-button" type="button" data-screen="power">Se allt</button>
+            </div>
 
             <div class="session-cards">
               <button class="list-card" type="button" data-screen="reset">
@@ -413,6 +463,30 @@ function renderScreen(screen) {
               <div class="recipe-copy">
                 <strong>Kikärtsgryta med spenat</strong>
                 <span>25 min · middag · 22 g protein</span>
+              </div>
+            </div>
+
+            <div class="recipe-row recipe-item" data-recipe-tags="breakfast quick" ${recipeMatchesFilter(recipeFilter, 'breakfast quick') ? '' : 'hidden'}>
+              <div class="recipe-thumb" style="background-image:url('design/uploads/healthy-chia-seed-pudding-with-fresh-blueberries-a-2026-09-11-18-37-12-utc-web.jpg'); background-size:cover; background-position:50% 50%;"></div>
+              <div class="recipe-copy">
+                <strong>Overnight oats med blåbär</strong>
+                <span>5 min · frukost · förbered kvällen före</span>
+              </div>
+            </div>
+
+            <div class="recipe-row recipe-item" data-recipe-tags="post-workout quick" ${recipeMatchesFilter(recipeFilter, 'post-workout quick') ? '' : 'hidden'}>
+              <div class="recipe-thumb" style="background-image:url('design/uploads/bowl-of-fresh-salad-with-cooked-meat-2026-03-25-04-27-28-utc.jpg'); background-size:cover; background-position:35% 50%;"></div>
+              <div class="recipe-copy">
+                <strong>Grön linssallad med citron</strong>
+                <span>15 min · lunch · 18 g protein</span>
+              </div>
+            </div>
+
+            <div class="recipe-row recipe-item" data-recipe-tags="breakfast quick" ${recipeMatchesFilter(recipeFilter, 'breakfast quick') ? '' : 'hidden'}>
+              <div class="recipe-thumb" style="background-image:url('design/uploads/fresh-strawberries-and-seeds-in-healthy-yogurt-bow-2026-09-21-17-02-05-utc (1).jpeg'); background-size:cover; background-position:50% 50%;"></div>
+              <div class="recipe-copy">
+                <strong>Yoghurt med bär &amp; frön</strong>
+                <span>8 min · frukost · enkelt att variera</span>
               </div>
             </div>
 
@@ -526,6 +600,10 @@ function bindEvents() {
     button.addEventListener('click', () => {
       const target = button.dataset.screen;
       if (target) {
+        if (target === 'detail' && button.dataset.workout) {
+          state.selectedWorkoutId = button.dataset.workout;
+          state.player = { started: false, running: false, completed: false, stepIndex: 0, secondsLeft: getSelectedWorkout().steps[0].minutes * 60 };
+        }
         state.currentScreen = target;
         if (target === 'power') state.activeTab = 'power';
         if (target === 'nutrition') state.activeTab = 'nutrition';
@@ -600,6 +678,10 @@ function renderTrainingFilter(key, label) {
       ${active && key === 'level' ? '<span class="dot"></span>' : ''}${label}
     </button>
   `;
+}
+
+function getSelectedWorkout() {
+  return workouts.find((workout) => workout.id === state.selectedWorkoutId) || workouts[0];
 }
 
 function cycleTrainingFilter(key) {
@@ -685,8 +767,10 @@ function tickBreathing() {
 
 function renderPlayer() {
   const { player } = state;
+  const workout = getSelectedWorkout();
+  const workoutSteps = workout.steps;
   const currentStep = workoutSteps[player.stepIndex];
-  const totalSeconds = workoutSteps.reduce((total, step) => total + step.minutes * 60, 0);
+  const totalSeconds = workout.minutes * 60;
   const elapsedSeconds = totalSeconds - workoutSteps
     .slice(player.stepIndex + 1)
     .reduce((total, step) => total + step.minutes * 60, 0) - player.secondsLeft;
@@ -698,7 +782,7 @@ function renderPlayer() {
     return `
       <div class="player-complete">
         <div class="complete-mark" aria-hidden="true">✓</div>
-        <p class="player-kicker">MORNING FLOW · 20 MIN</p>
+        <p class="player-kicker">${workout.title.toUpperCase()} · ${workout.minutes} MIN</p>
         <h1>Fint jobbat, Elin.</h1>
         <p class="player-cue">Du har genomfört hela passet. Ta en stund och känn efter hur kroppen mår.</p>
         <div class="completion-actions">
@@ -714,7 +798,7 @@ function renderPlayer() {
       <header class="player-header">
         <button class="icon-button" type="button" data-player-exit aria-label="Avsluta spelaren">←</button>
         <div class="player-header-copy">
-          <span class="player-kicker">MORNING FLOW</span>
+          <span class="player-kicker">${workout.title.toUpperCase()}</span>
           <span class="player-step-count">STEG ${player.stepIndex + 1} AV ${workoutSteps.length}</span>
         </div>
         <span class="player-header-spacer" aria-hidden="true"></span>
@@ -756,6 +840,7 @@ function renderPlayer() {
 }
 
 function startWorkout() {
+  const workoutSteps = getSelectedWorkout().steps;
   if (!state.player.started || state.player.completed) {
     state.player = {
       started: true,
@@ -801,6 +886,7 @@ function tickWorkoutTimer() {
 }
 
 function advanceWorkoutStep() {
+  const workoutSteps = getSelectedWorkout().steps;
   if (state.player.stepIndex >= workoutSteps.length - 1) {
     completeWorkout();
     return;
@@ -813,10 +899,12 @@ function advanceWorkoutStep() {
 
 function completeWorkout() {
   pauseWorkoutTimer();
+  const workout = getSelectedWorkout();
   const workoutTask = state.tasks.find((task) => task.id === 1);
   if (workoutTask && !workoutTask.done) {
     workoutTask.done = true;
-    workoutTask.meta = `20 min · klart ${new Intl.DateTimeFormat('sv-SE', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
+    workoutTask.title = workout.title;
+    workoutTask.meta = `${workout.minutes} min · klart ${new Intl.DateTimeFormat('sv-SE', { hour: '2-digit', minute: '2-digit' }).format(new Date())}`;
     updateWorkoutRoutine(true);
   }
   state.lastWorkoutCompletedAt = Date.now();
