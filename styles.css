@@ -230,10 +230,17 @@ button {
   padding: 0 22px;
   overflow-x: auto;
   overflow-y: hidden;
+  cursor: grab;
+  user-select: none;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+}
+
+.option-row.is-grabbing {
+  cursor: grabbing;
+  scroll-snap-type: none;
 }
 
 .option-row::-webkit-scrollbar {

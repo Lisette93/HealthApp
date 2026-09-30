@@ -552,6 +552,8 @@ function renderScreen(screen) {
 }
 
 function bindEvents() {
+  bindHorizontalMouseDrag();
+
   document.querySelectorAll('[data-training-filter]').forEach((button) => {
     button.addEventListener('click', () => cycleTrainingFilter(button.dataset.trainingFilter));
   });
@@ -669,6 +671,76 @@ function bindEvents() {
 
   updateTrainingList();
   updateRecipeList();
+}
+
+function bindHorizontalMouseDrag() {
+  const row = document.querySelector('.option-row');
+  if (!row || row.scrollWidth <= row.clientWidth) return;
+
+  let pointerDown = false;
+  let dragStarted = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let lastMouseX = 0;
+  let lastMouseOverRow = false;
+
+  row.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) return;
+    pointerDown = true;
+    dragStarted = false;
+    startX = event.clientX;
+    startScrollLeft = row.scrollLeft;
+    lastMouseX = event.clientX;
+    lastMouseOverRow = true;
+    row.classList.add('is-grabbing');
+  });
+
+  document.addEventListener('mousemove', (event) => {
+    if (pointerDown && event.buttons !== 1) {
+      pointerDown = false;
+      row.classList.remove('is-grabbing');
+      return;
+    }
+
+    if (!pointerDown) {
+      if (event.buttons !== 1 || !lastMouseOverRow) {
+        lastMouseX = event.clientX;
+        lastMouseOverRow = row.contains(event.target);
+        return;
+      }
+      pointerDown = true;
+      dragStarted = false;
+      startX = lastMouseX;
+      startScrollLeft = row.scrollLeft;
+      row.classList.add('is-grabbing');
+    }
+
+    const distance = event.clientX - startX;
+    if (!dragStarted && Math.abs(distance) < 5) return;
+    dragStarted = true;
+    event.preventDefault();
+    row.scrollLeft = startScrollLeft - distance;
+  });
+
+  const finishDrag = () => {
+    if (!pointerDown) return;
+    pointerDown = false;
+    row.classList.remove('is-grabbing');
+    lastMouseOverRow = false;
+  };
+
+  document.addEventListener('mouseup', finishDrag);
+  document.addEventListener('pointerup', finishDrag);
+  window.addEventListener('blur', finishDrag);
+
+  row.addEventListener('click', (event) => {
+    if (!dragStarted) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    pointerDown = false;
+    row.classList.remove('is-grabbing');
+    dragStarted = false;
+  }, true);
 }
 
 function renderTrainingFilter(key, label) {
